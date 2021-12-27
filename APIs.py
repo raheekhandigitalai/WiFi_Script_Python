@@ -1,6 +1,9 @@
 import requests
 import json
 
+access_key_admin = 'eyJ4cC51Ijo3MzU0MjQsInhwLnAiOjIsInhwLm0iOiJNVFUzT0RZd016ZzFOek16TVEiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE4OTM5NjM4NTcsImlzcyI6ImNvbS5leHBlcml0ZXN0In0.GP0hK0o0j2WEKt-J0aXsVbu1tmt-PhWUryqluokszJk'
+access_key_cleanup = ""
+
 cloud_url = 'https://uscloud.experitest.com'
 end_point = '/api/v1/devices'
 
@@ -14,7 +17,7 @@ def get_device_id(serial_number):
     end_url = cloud_url_and_api_end_point + "?query=@serialnumber='" + serial_number + "'"
 
     headers = {
-        'Authorization': 'Bearer eyJ4cC51Ijo3MzU0MjQsInhwLnAiOjIsInhwLm0iOiJNVFUzT0RZd016ZzFOek16TVEiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE4OTM5NjM4NTcsImlzcyI6ImNvbS5leHBlcml0ZXN0In0.GP0hK0o0j2WEKt-J0aXsVbu1tmt-PhWUryqluokszJk',
+        'Authorization': 'Bearer %s' % access_key_admin,
         'Content-Type': 'application/json'
     }
 
@@ -39,7 +42,7 @@ def remove_all_device_tags(device_id):
     end_url = cloud_url_and_api_end_point + '/' + device_id + '/tags'
 
     headers = {
-        'Authorization': 'Bearer eyJ4cC51Ijo3MzU0MjQsInhwLnAiOjIsInhwLm0iOiJNVFUzT0RZd016ZzFOek16TVEiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE4OTM5NjM4NTcsImlzcyI6ImNvbS5leHBlcml0ZXN0In0.GP0hK0o0j2WEKt-J0aXsVbu1tmt-PhWUryqluokszJk',
+        'Authorization': 'Bearer %s' % access_key_admin,
         'Content-Type': 'application/json'
     }
 
@@ -61,7 +64,7 @@ def add_device_tag(device_id, tag_value):
     end_url = cloud_url_and_api_end_point + '/' + device_id + '/tags/' + tag_value
 
     headers = {
-        'Authorization': 'Bearer eyJ4cC51Ijo3MzU0MjQsInhwLnAiOjIsInhwLm0iOiJNVFUzT0RZd016ZzFOek16TVEiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE4OTM5NjM4NTcsImlzcyI6ImNvbS5leHBlcml0ZXN0In0.GP0hK0o0j2WEKt-J0aXsVbu1tmt-PhWUryqluokszJk',
+        'Authorization': 'Bearer %s' % access_key_admin,
         'Content-Type': 'application/json'
     }
 
@@ -78,15 +81,29 @@ def add_device_tag(device_id, tag_value):
 def finish_cleanup_state(uid, status):
     # POST - /api/v1/cleanup-finish?deviceId=uid&status=status
     # Bearer Auth Header
-    return 0
+    end_url = cloud_url + '/api/v1/cleanup-finish?deviceId=' + uid + '&status=' + status
 
-
-def get_headers():
     headers = {
-        'Authorization': 'Bearer eyJ4cC51Ijo3MzU0MjQsInhwLnAiOjIsInhwLm0iOiJNVFUzT0RZd016ZzFOek16TVEiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE4OTM5NjM4NTcsImlzcyI6ImNvbS5leHBlcml0ZXN0In0.GP0hK0o0j2WEKt-J0aXsVbu1tmt-PhWUryqluokszJk',
+        'Authorization': 'Bearer %s' % access_key_cleanup,
         'Content-Type': 'application/json'
     }
-    return headers
+
+    response = requests.request('POST', end_url, headers=headers, verify=False)
+
+    if response.status_code == 200:
+        print('Successfully finished Cleanup State: %s' % response.text)
+    else:
+        print('Unable to finish Cleanup State: %s' % response.text)
+
+    return response
+
+
+# def get_headers():
+#     headers = {
+#         'Authorization': 'Bearer %s' % access_key_admin,
+#         'Content-Type': 'application/json'
+#     }
+#     return headers
 
 
 def get_json_value_from_response_content(value, response_content):
