@@ -84,10 +84,9 @@ class SampleTestCase(unittest.TestCase):
             # add custom device tag
             add_device_tag(device_id, bad_tag_value)
 
-        status = 'passed'
-
     def tearDown(self):
-        print(status)
+        status = 'passed'
+        # print(status)
         self.driver.quit()
         finish_cleanup_state(uid, status)
 
