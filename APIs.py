@@ -24,7 +24,7 @@ def get_device_id(serial_number):
     response = requests.request('GET', end_url, headers=headers, verify=False)
 
     if response.status_code == 200:
-        print('Successfully removed all device tags from device, response output: %s' % response.text)
+        print('Successfully removed all device tags from device, response output: %s' % response.status_code)
         device_id = get_json_value_from_response_content('id', response.content)
     else:
         print('Unable to remove device tags from device, response output: %s' % response.text)
