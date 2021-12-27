@@ -54,6 +54,7 @@ def add_device_tag(device_id, tag_value):
 
     if response.status_code == 200:
         print('Python Script - Successfully added device tag to device, response output: %s' % response.text)
+        print('Python Script - Device Tag Added: %s' % tag_value)
     else:
         print('Python Script - Unable to add device tag to device, response output: %s' % response.text)
 
