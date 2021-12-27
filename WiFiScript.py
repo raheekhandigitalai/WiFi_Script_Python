@@ -56,11 +56,10 @@ class SampleTestCase(unittest.TestCase):
     # capabilities['accessKey'] = '%s' % config.get('seetest_authorization', 'access_key_admin')
     capabilities['accessKey'] = '%s' % config.get('seetest_authorization', 'access_key_cleanup')
     capabilities['udid'] = '%s' % uid
-    # capabilities['deviceQuery'] = "@os='ios' and @serialnumber='%s'" % uid,
-    # capabilities['deviceQuery'] = "@serialnumber='56793ec400fe2121df8a6341591cbd25b7c26c70'"
     capabilities['platformName'] = 'iOS'
     capabilities['autoDismissAlerts'] = True
     capabilities['releaseDevice'] = False
+    capabilities['newCommandTimeout'] = 60
     capabilities['bundleId'] = 'com.apple.Preferences'
 
     def setUp(self):

@@ -10,7 +10,7 @@ end_point = '/api/v1/devices'
 
 cloud_url_and_api_end_point = cloud_url + end_point
 
-def get_device_id(serial_number):
+def get_device_id(serial_number, driver):
     # GET - /api/v1/devices?query=@serialnumber=serial_number
     # Bearer Auth Header
     # content-type application/json
@@ -25,9 +25,13 @@ def get_device_id(serial_number):
 
     if response.status_code == 200:
         print('Successfully removed all device tags from device, response output: %s' % response.status_code)
+        driver.execute(
+            'seetest:client.report(\"Removed device tags. Response output: %s\", \"passed\")') % response.text
         device_id = get_json_value_from_response_content('id', response.content)
     else:
         print('Unable to remove device tags from device, response output: %s' % response.text)
+        driver.execute(
+            'seetest:client.report(\"Unable to remove device tags. Response output: %s\", \"failed\")') % response.text
 
     return device_id
 
