@@ -1,14 +1,14 @@
 import requests
 import json
+import configparser
 
-access_key_admin = 'eyJ4cC51Ijo3MzU0MjQsInhwLnAiOjIsInhwLm0iOiJNVFUzT0RZd016ZzFOek16TVEiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE4OTM5NjM4NTcsImlzcyI6ImNvbS5leHBlcml0ZXN0In0.GP0hK0o0j2WEKt-J0aXsVbu1tmt-PhWUryqluokszJk'
-access_key_cleanup = ""
+config = configparser.ConfigParser()
+config.read('config.properties')
 
 cloud_url = 'https://uscloud.experitest.com'
 end_point = '/api/v1/devices'
 
 cloud_url_and_api_end_point = cloud_url + end_point
-
 
 def get_device_id(serial_number):
     # GET - /api/v1/devices?query=@serialnumber=serial_number
@@ -17,7 +17,7 @@ def get_device_id(serial_number):
     end_url = cloud_url_and_api_end_point + "?query=@serialnumber='" + serial_number + "'"
 
     headers = {
-        'Authorization': 'Bearer %s' % access_key_admin,
+        'Authorization': 'Bearer %s' % config.get('seetest_authorization', 'access_key_admin'),
         'Content-Type': 'application/json'
     }
 
@@ -42,7 +42,7 @@ def remove_all_device_tags(device_id):
     end_url = cloud_url_and_api_end_point + '/' + device_id + '/tags'
 
     headers = {
-        'Authorization': 'Bearer %s' % access_key_admin,
+        'Authorization': 'Bearer %s' % config.get('seetest_authorization', 'access_key_admin'),
         'Content-Type': 'application/json'
     }
 
@@ -64,7 +64,7 @@ def add_device_tag(device_id, tag_value):
     end_url = cloud_url_and_api_end_point + '/' + device_id + '/tags/' + tag_value
 
     headers = {
-        'Authorization': 'Bearer %s' % access_key_admin,
+        'Authorization': 'Bearer %s' % config.get('seetest_authorization', 'access_key_admin'),
         'Content-Type': 'application/json'
     }
 
@@ -80,11 +80,10 @@ def add_device_tag(device_id, tag_value):
 
 def finish_cleanup_state(uid, status):
     # POST - /api/v1/cleanup-finish?deviceId=uid&status=status
-    # Bearer Auth Header
-    end_url = cloud_url + '/api/v1/cleanup-finish?deviceId=' + uid + '&status=' + status
+    end_url = 'https://uscloud.experitest.com/api/v1/cleanup-finish?deviceId=' + uid + '&status=' + status
 
     headers = {
-        'Authorization': 'Bearer %s' % access_key_cleanup,
+        'Authorization': 'Bearer %s' % config.get('seetest_authorization', 'access_key_cleanup'),
         'Content-Type': 'application/json'
     }
 

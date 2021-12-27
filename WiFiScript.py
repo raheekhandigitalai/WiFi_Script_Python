@@ -1,5 +1,6 @@
 import os
 import unittest
+import configparser
 
 from selenium.webdriver import DesiredCapabilities
 
@@ -22,6 +23,9 @@ uid = os.getenv("deviceID")
 os = os.getenv("deviceOS")
 
 capabilities = DesiredCapabilities.IPHONE
+
+config = configparser.ConfigParser()
+config.read('config.properties')
 # device_name = os.getenv("deviceName")
 # os_version = os.getenv("osVersion")
 # device_model = os.getenv("deviceModel")
@@ -45,31 +49,19 @@ capabilities = DesiredCapabilities.IPHONE
 class SampleTestCase(unittest.TestCase):
 
     # def test_2(self):
-    #     print(get_device_id('56793ec400fe2121df8a6341591cbd25b7c26c70'))
+        # print(get_device_id('56793ec400fe2121df8a6341591cbd25b7c26c70'))
 
-    # capabilities = DesiredCapabilities
     capabilities['testName'] = 'pythonTest'
-    capabilities['accessKey'] = '%s' % access_key_admin
-    capabilities['deviceQuery'] = "@serialnumber='56793ec400fe2121df8a6341591cbd25b7c26c70'"
+    capabilities['accessKey'] = '%s' % config.get('seetest_authorization', 'access_key_admin')
+    capabilities['deviceQuery'] = "@serialnumber='%s'" % uid,
+    # capabilities['deviceQuery'] = "@serialnumber='56793ec400fe2121df8a6341591cbd25b7c26c70'"
     capabilities['platformName'] = 'iOS'
     capabilities['autoDismissAlerts'] = True
     capabilities['releaseDevice'] = False
     capabilities['bundleId'] = 'com.apple.Preferences'
 
-    # desired_caps = dict(
-    #     testName="PythonTest",
-    #     accessKey="eyJ4cC51Ijo3MzU0MjQsInhwLnAiOjIsInhwLm0iOiJNVFUzT0RZd016ZzFOek16TVEiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE4OTM5NjM4NTcsImlzcyI6ImNvbS5leHBlcml0ZXN0In0.GP0hK0o0j2WEKt-J0aXsVbu1tmt-PhWUryqluokszJk",
-    #     deviceQuery="@serialnumber='56793ec400fe2121df8a6341591cbd25b7c26c70'",
-    #     # deviceQuery="@serialnumber='%s'" % uid,
-    #     platformName="iOS",
-    #     autoDismissAlerts=True,
-    #     releaseDevice=False,
-    #     bundleId="com.apple.Preferences"
-    # )
-
     def setUp(self):
         self.driver = webdriver.Remote(desired_capabilities=capabilities, command_executor='https://uscloud.experitest.com/wd/hub')
-        # self.driver = webdriver.Remote('https://uscloud.experitest.com/wd/hub', desired_caps)
 
     def test_1(self):
         device_udid = self.driver.capabilities['udid']
@@ -90,10 +82,10 @@ class SampleTestCase(unittest.TestCase):
             # add custom device tag
             add_device_tag(device_id, bad_tag_value)
 
-    status = 'passed'
+        status = 'passed'
 
     def tearDown(self):
-        # finish_cleanup_state(uid, status)
+        finish_cleanup_state(uid, status)
         print(status)
         self.driver.quit()
 
