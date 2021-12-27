@@ -32,26 +32,25 @@ class SampleTestCase(unittest.TestCase):
     capabilities['platformName'] = 'iOS'
     capabilities['autoDismissAlerts'] = True
     capabilities['releaseDevice'] = False
-    # capabilities['newCommandTimeout'] = 60
     capabilities['bundleId'] = 'com.apple.Preferences'
 
     def setUp(self):
         self.driver = webdriver.Remote(desired_capabilities=capabilities, command_executor='https://uscloud.experitest.com/wd/hub')
 
-    def test_1(self):
+    def test_wifi_connection(self):
         device_udid = self.driver.capabilities['udid']
         device_id = get_device_id(device_udid)
         wifi_label = self.driver.find_element(By.XPATH, "(//*[@id='Wi-Fi']//XCUIElementTypeStaticText)[2]").text
 
         # Check if the desired wifi name is present in the connected wifi
         if config.get('wifi', 'wifi_name') in wifi_label:
-            print('Connected to correct WiFi: %s' % wifi_label)
+            print('Python Script - Connected to correct WiFi: %s' % wifi_label)
             # remove all device tags
             remove_all_device_tags(device_id)
             # add custom device tag
             add_device_tag(device_id, config.get('tags', 'good_tag_value'))
         else:
-            print('Not Connected to correct WiFi: %s' % wifi_label)
+            print('Python Script - Not Connected to correct WiFi: %s' % wifi_label)
             # remove all device tags
             remove_all_device_tags(device_id)
             # add custom device tag
