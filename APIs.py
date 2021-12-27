@@ -10,7 +10,7 @@ end_point = '/api/v1/devices'
 
 cloud_url_and_api_end_point = cloud_url + end_point
 
-def get_device_id(serial_number, driver):
+def get_device_id(serial_number):
     # GET - /api/v1/devices?query=@serialnumber=serial_number
     # Bearer Auth Header
     # content-type application/json
