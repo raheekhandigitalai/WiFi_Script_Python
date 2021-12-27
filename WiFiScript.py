@@ -53,7 +53,8 @@ class SampleTestCase(unittest.TestCase):
         # print(get_device_id('56793ec400fe2121df8a6341591cbd25b7c26c70'))
 
     capabilities['testName'] = 'pythonTest'
-    capabilities['accessKey'] = '%s' % config.get('seetest_authorization', 'access_key_admin')
+    # capabilities['accessKey'] = '%s' % config.get('seetest_authorization', 'access_key_admin')
+    capabilities['accessKey'] = '%s' % config.get('seetest_authorization', 'access_key_cleanup')
     capabilities['udid'] = '%s' % uid
     # capabilities['deviceQuery'] = "@os='ios' and @serialnumber='%s'" % uid,
     # capabilities['deviceQuery'] = "@serialnumber='56793ec400fe2121df8a6341591cbd25b7c26c70'"
