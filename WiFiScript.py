@@ -68,7 +68,7 @@ class SampleTestCase(unittest.TestCase):
     def test_1(self):
         device_udid = self.driver.capabilities['udid']
         # device_udid = self.driver.caps['udid'] // works in selenium4 / appiumclient 2.1.0
-        device_id = get_device_id(device_udid)
+        device_id = get_device_id(device_udid, self.driver)
         wifi_label = self.driver.find_element(By.XPATH, "(//*[@id='Wi-Fi']//XCUIElementTypeStaticText)[2]")
 
         if wifi_name in wifi_label.text:
