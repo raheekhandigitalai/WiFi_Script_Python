@@ -53,7 +53,8 @@ class SampleTestCase(unittest.TestCase):
 
     capabilities['testName'] = 'pythonTest'
     capabilities['accessKey'] = '%s' % config.get('seetest_authorization', 'access_key_admin')
-    capabilities['deviceQuery'] = "@serialnumber='%s'" % uid,
+    capabilities['udid'] = uid
+    # capabilities['deviceQuery'] = "@serialnumber='%s'" % uid,
     # capabilities['deviceQuery'] = "@serialnumber='56793ec400fe2121df8a6341591cbd25b7c26c70'"
     capabilities['platformName'] = 'iOS'
     capabilities['autoDismissAlerts'] = True
