@@ -80,7 +80,7 @@ def add_device_tag(device_id, tag_value):
 
 def finish_cleanup_state(uid, status):
     # POST - /api/v1/cleanup-finish?deviceId=uid&status=status
-    end_url = 'https://uscloud.experitest.com/api/v1/cleanup-finish?deviceId=' + uid + '&status=' + status
+    end_url = 'https://uscloud.experitest.com/api/v1/cleanup-finish?deviceId=' + str(uid) + '&status=' + str(status)
 
     headers = {
         'Authorization': 'Bearer %s' % config.get('seetest_authorization', 'access_key_cleanup'),
