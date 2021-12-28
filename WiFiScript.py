@@ -38,6 +38,7 @@ class SampleTestCase(unittest.TestCase):
         self.driver = webdriver.Remote(desired_capabilities=capabilities, command_executor='https://uscloud.experitest.com/wd/hub')
 
     def test_wifi_connection(self):
+        print('os: %s' % os)
         device_udid = self.driver.capabilities['udid']
         device_id = get_device_id(device_udid)
         wifi_label = self.driver.find_element(By.XPATH, "(//*[@id='Wi-Fi']//XCUIElementTypeStaticText)[2]").text
