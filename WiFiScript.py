@@ -29,9 +29,11 @@ class SampleTestCase(unittest.TestCase):
 
     if operating_system == 'Android':
         print('operating_system is android, not yet supported: %s' % operating_system)
+        status = 'passed'
+        finish_cleanup_state(uid, status)
         sys.exit()
     else:
-        print('operating_system is ios: %s' % operating_system)
+        print('operating_system is ios, continuing: %s' % operating_system)
 
     capabilities['testName'] = 'Webhook cleanup'
     capabilities['accessKey'] = '%s' % config.get('seetest_authorization', 'access_key_cleanup')
