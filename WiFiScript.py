@@ -1,6 +1,7 @@
 import os
 import unittest
 import configparser
+import sys
 
 from APIs import remove_all_device_tags
 from APIs import add_device_tag
@@ -13,7 +14,7 @@ from selenium.webdriver import DesiredCapabilities
 status = 'failed'
 
 uid = os.getenv("deviceID")
-os = os.getenv("deviceOS")
+operating_system = os.getenv("deviceOS")
 
 capabilities = DesiredCapabilities.IPHONE
 
@@ -25,6 +26,12 @@ class SampleTestCase(unittest.TestCase):
 
     # def test_2(self):
         # print(get_device_id('56793ec400fe2121df8a6341591cbd25b7c26c70'))
+
+    if operating_system == 'Android':
+        print('operating_system is android, not yet supported: %s' % operating_system)
+        sys.exit()
+    else:
+        print('operating_system is ios: %s' % operating_system)
 
     capabilities['testName'] = 'Webhook cleanup'
     capabilities['accessKey'] = '%s' % config.get('seetest_authorization', 'access_key_cleanup')
@@ -38,7 +45,7 @@ class SampleTestCase(unittest.TestCase):
         self.driver = webdriver.Remote(desired_capabilities=capabilities, command_executor='https://uscloud.experitest.com/wd/hub')
 
     def test_wifi_connection(self):
-        print('os: %s' % os)
+        print('operating_system: %s' % operating_system)
         device_udid = self.driver.capabilities['udid']
         device_id = get_device_id(device_udid)
         wifi_label = self.driver.find_element(By.XPATH, "(//*[@id='Wi-Fi']//XCUIElementTypeStaticText)[2]").text
