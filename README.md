@@ -109,3 +109,39 @@ def instance = Jenkins.instance
 instance.setCrumbIssuer(null)
 ```
    
+   e. As I am using Python, I needed to install a plugin to allow Python script to be triggered. 
+   
+   I used [ShiningPanda's Custom Python Builder plugin](https://plugins.jenkins.io/shiningpanda/) for this, but any other plugin that allows for Python to be triggered allows for the same approach.
+   
+   Under the Jenkins build configuration, I added a build step with the following input:
+   
+   ![img_7.png](img_7.png)
+   
+   Under "Home" I have put the local path of where my Python3 resides.
+   Under "Nature" I have **Shell** selected for executing shell script
+   Under "Command" is the commands required to setup the WiFiScript.py and trigger it.
+   
+   I am installing virtualenv, so that I can spin an instance up to run the test under:
+```
+python3 -m pip install --user virtualenv
+```
+
+   I am then initializing the instance
+```
+python3 -m venv env
+```
+
+   And activating the instance
+```
+source env/bin/activate
+```
+
+   To make life easier, I have stored all the required packages under requirements.txt, before running the test, it will install the relevant packages needed (_appium / selenium, and more_)
+```
+pip3 install -r requirements.txt
+```
+
+   This will run the test using [unittest](https://docs.python.org/3/library/unittest.html) framework 
+```
+python3 -m unittest WiFiScript.py
+```
