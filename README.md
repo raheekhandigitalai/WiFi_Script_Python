@@ -8,22 +8,22 @@ Prerequisites:
 
 1. Populate the relevant fields in the **config.properties** file, the following fields are available:
 
+```
+[seetest_authorization]
+access_key_admin=<>
+access_key_cleanup=<> - Can be obtained by logging in to SeeTest Cloud as Cloud Admin > Settings > Device Policies > Click on Key Icon to reveal Access Key of Cleanup User
 
-    [seetest_authorization]
-    access_key_admin=<>
-    access_key_cleanup=<> - Can be obtained by logging in to SeeTest Cloud as Cloud Admin > Settings > Device Policies > Click on Key Icon to reveal Access Key of Cleanup User
+[seetest_urls]
+cloud_url=http://<seetest_cloud_url>:<port>
+end_point=/api/v1/devices
 
-    [seetest_urls]
-    cloud_url=http://<seetest_cloud_url>:<port>
-    end_point=/api/v1/devices
+[tags]
+good_tag_value=GoodWiFi - String value of tag we want to provide to a device if it is connected to CORRECT WiFi
+bad_tag_value=BadWiFi - String value of tag we want to provide to a device if it is connected to INCORRECT WiFi
 
-    [tags]
-    good_tag_value=GoodWiFi - String value of tag we want to provide to a device if it is connected to CORRECT WiFi
-    bad_tag_value=BadWiFi - String value of tag we want to provide to a device if it is connected to INCORRECT WiFi
-
-    [wifi]
-    wifi_name=WiFiName - String value of the WiFi connection we are looking for on the device
-
+[wifi]
+wifi_name=WiFiName - String value of the WiFi connection we are looking for on the device
+```
 
 2. Enable Webhook Cleanup in SeeTest Cloud on a global level
    1. Login as a Cloud Admin
@@ -37,8 +37,10 @@ Prerequisites:
 
    The URL is the full JOB URL:
 
-     https://<jenkins_url>/job/<job_name>/buildWithParameters?=Token
-   
+```
+https://<jenkins_url>/job/<job_name>/buildWithParameters?=Token
+```
+
   And the Authorization Header Value is Cloud Admin credentials. If you don't have this format handy, a quick and easy way is to open up Postman, and populate the Authorization field like this choosing **Basic Auth**:
 
   ![img_5.png](img_5.png)
@@ -79,14 +81,19 @@ Prerequisites:
 
    These will be important and referenced in the code **WiFiScript.py**, they are defined in the following way:
 
-       import os
+```
+import os
        
-       uid = os.getenv("deviceID")
-       operating_system = os.getenv("deviceOS")
+uid = os.getenv("deviceID")
+operating_system = os.getenv("deviceOS")
+```
 
    They can then be referenced respectively depending on what we need to do in the script. When initializing the session, since we don't know which device it will pick to begin with, we need to let the Jenkins job device that, depending on which device is getting cleaned up at the time. This is how should define the device setup in the capabilities:
 
-       capabilities['udid'] = '%s' % uid
+
+```
+capabilities['udid'] = '%s' % uid
+```
 
    d. When I tried to invoke the code, I was getting an error message regarding needing a CrumbIssuer. 
 
@@ -95,9 +102,10 @@ Prerequisites:
    According to online sources, there are a number of ways to tackle this, I choose the easiest option to simply disable the csrf check from Jenkins by running a script (_Not recommended in production_)
 
    From Manage Jenkins > Script Console, I ran following snippet:   
-                  
-                     import jenkins.model.Jenkins
-                     def instance = Jenkins.instance
-                     instance.setCrumbIssuer(null)
-
+       
+```           
+import jenkins.model.Jenkins
+def instance = Jenkins.instance
+instance.setCrumbIssuer(null)
+```
    
