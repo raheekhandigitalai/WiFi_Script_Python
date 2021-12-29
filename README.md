@@ -1,4 +1,4 @@
-# WiFi_Script_Python
+# Custom Webhook Cleanup - SeeTest Cloud (_Digital.ai's Continuous Testing platform_)
 
 The purpose of this script is to allow us to perform custom steps on mobile devices hosted on a SeeTest Cloud instance.
 
