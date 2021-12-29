@@ -4,7 +4,7 @@ The purpose of this script is to allow us to perform custom steps on mobile devi
 
 This script will be triggered as part of the cleanup mechanism.
 
-Prerequisites:
+## Prerequisites:
 
 1. Populate the relevant fields in the **config.properties** file, the following fields are available:
 
@@ -118,10 +118,12 @@ instance.setCrumbIssuer(null)
    ![img_7.png](img_7.png)
    
    Under "Home" I have put the local path of where my Python3 resides.
+
    Under "Nature" I have **Shell** selected for executing shell script
+
    Under "Command" is the commands required to setup the WiFiScript.py and trigger it.
    
-   I am installing virtualenv, so that I can spin an instance up to run the test under:
+   I am installing **virtualenv**, so that I can spin an instance up to run the test under:
 ```
 python3 -m pip install --user virtualenv
 ```
@@ -136,7 +138,7 @@ python3 -m venv env
 source env/bin/activate
 ```
 
-   To make life easier, I have stored all the required packages under requirements.txt, before running the test, it will install the relevant packages needed (_appium / selenium, and more_)
+   To make life easier, I have stored all the required packages under **requirements.txt**, before running the test, it will install the relevant packages needed (_appium / selenium, and more_)
 ```
 pip3 install -r requirements.txt
 ```
@@ -145,3 +147,22 @@ pip3 install -r requirements.txt
 ```
 python3 -m unittest WiFiScript.py
 ```
+
+
+## Invoking the Cleanup Mechanism
+
+   Considering the setup is done, the cleanup mechanism can now be invoked. To test this out, we can login to the SeeTest Cloud instance in a project where Webhook Cleanup is enabled.
+
+   Open any device from the Devices Page:
+   
+   ![img_8.png](img_8.png)
+   
+   Once opened, Release the device:
+   
+   ![img_9.png](img_9.png)
+   
+   This will automatically trigger the cleanup process:
+   
+   We can also see this by switching the Devices Page view to a List View:
+   
+   ![img_10.png](img_10.png)
