@@ -1,8 +1,42 @@
 # Custom Webhook Cleanup - SeeTest Cloud (_Digital.ai's Continuous Testing platform_)
 
+## Introduction
+
 The purpose of this script is to allow us to perform custom steps on mobile devices hosted on a SeeTest Cloud instance.
 
 This script will be triggered as part of the cleanup mechanism.
+
+We already have an official documentation page regarding the Webhook Cleanup feature, [find the documentation page here](https://docs.experitest.com/display/COM/Webhook+Cleanup).
+
+This guide will help you understand the complete setup including third party tools used such as Jenkins.
+
+## Tools 
+
+The following tools were used for this integration:
+
+**Programming Language**
+
+I used Python, as it is quicker to compile the code and have a test running. The importance of a cleanup is to do its job quickly and efficiently. I initially started with Java with Maven, and the time it took to compile the code and then run the test was significantly higher, making this inefficient.
+I used Python3 specifically, as some of the approaches we’ll take is slightly different for Python 2 vs 3. And generally speaking, using a newer version is also recommended.
+
+**Framework**
+
+Appium was used as the choice of automation framework, and also unittest to define the tests in a better way. We’ll have a closer look at an example later on.
+PyCharm
+While you can write Python code in other IDEs, I choose PyCharm as it is still relatively lightweight and allows for easy coding in Python.
+
+**Jenkins**
+
+Jenkins was used as my personal choice for running the code, but any other CICD tool would be able to do the same job.
+Here are some example integrations with other tools: [Continuous Integrations](https://docs.experitest.com/display/TE/Continuous+Integrations)
+
+**GitHub**
+
+GitHub was used as my personal choice for hosting a code base in a repository, but any other tool would achieve the same thing.
+
+**Git**
+
+As I am using GitHub, it made sense to also use Git to perform push / pull changes to the repository in GitHub.
 
 ## Prerequisites:
 
