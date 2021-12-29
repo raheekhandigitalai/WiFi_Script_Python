@@ -33,7 +33,7 @@ wifi_name=WiFiName - String value of the WiFi connection we are looking for on t
     In the configure section, we need to populate the relevant fields:
 
 
-   ![img_4.png](img_4.png)
+   ![img_4.png](images/img_4.png)
 
    The URL is the full JOB URL:
 
@@ -43,11 +43,11 @@ https://<jenkins_url>/job/<job_name>/buildWithParameters?=Token
 
   And the Authorization Header Value is Cloud Admin credentials. If you don't have this format handy, a quick and easy way is to open up Postman, and populate the Authorization field like this choosing **Basic Auth**:
 
-  ![img_5.png](img_5.png)
+  ![img_5.png](images/img_5.png)
 
   When exporting this to code, it will show the proper format (_Code Export Language does not matter_):
 
-  ![img_6.png](img_6.png)
+  ![img_6.png](images/img_6.png)
 
 3. Enable Webhook Cleanup in SeeTest Cloud on a project level
    1. Login as a Cloud Admin
@@ -64,20 +64,20 @@ https://<jenkins_url>/job/<job_name>/buildWithParameters?=Token
 
    a. since we are trying to invoke the job automatically as soon as a device is released, we need to configure the job to allow to be triggered remotely using Auth Token:
 
-   ![img.png](img.png)
+   ![img.png](images/img.png)
 
 
    b. Authentication Token is generated from Manage Jenkins > Manage Users > Select User > Configure. Under Configure, Create a new API Token (_Should be on an admin role or user who created the project_):
    
-   ![img_1.png](img_1.png)
+   ![img_1.png](images/img_1.png)
 
    Populate the Token in the Jenkins Job under **Build Triggers > Trigger Builds Remotely**, as well as in the **Webhook Cleanup Rule** as per Step 1.
 
    c. We need to parameterize the build by enabling "This project is parameterized". For this I installed EnvInject Plugin.    
 
-   ![img_2.png](img_2.png)
+   ![img_2.png](images/img_2.png)
 
-   ![img_3.png](img_3.png)
+   ![img_3.png](images/img_3.png)
 
    These will be important and referenced in the code **WiFiScript.py**, they are defined in the following way:
 
@@ -115,7 +115,7 @@ instance.setCrumbIssuer(null)
    
    Under the Jenkins build configuration, I added a build step with the following input:
    
-   ![img_7.png](img_7.png)
+   ![img_7.png](images/img_7.png)
    
    Under "Home" I have put the local path of where my Python3 resides.
 
@@ -155,14 +155,14 @@ python3 -m unittest WiFiScript.py
 
    Open any device from the Devices Page:
    
-   ![img_8.png](img_8.png)
+   ![img_8.png](images/img_8.png)
    
    Once opened, Release the device:
    
-   ![img_9.png](img_9.png)
+   ![img_9.png](images/img_9.png)
    
    This will automatically trigger the cleanup process:
    
    We can also see this by switching the Devices Page view to a List View:
    
-   ![img_10.png](img_10.png)
+   ![img_10.png](images/img_10.png)
