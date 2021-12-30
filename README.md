@@ -22,7 +22,8 @@ I used Python3 specifically, as some of the approaches we’ll take is slightly 
 **Framework**
 
 Appium was used as the choice of automation framework, and also unittest to define the tests in a better way. We’ll have a closer look at an example later on.
-PyCharm
+
+**PyCharm**
 While you can write Python code in other IDEs, I choose PyCharm as it is still relatively lightweight and allows for easy coding in Python.
 
 **Jenkins**
@@ -50,6 +51,7 @@ access_key_cleanup=<> - Can be obtained by logging in to SeeTest Cloud as Cloud 
 [seetest_urls]
 cloud_url=http://<seetest_cloud_url>:<port>
 end_point=/api/v1/devices
+wd_hub=/wd/hub
 
 [tags]
 good_tag_value=GoodWiFi - String value of tag we want to provide to a device if it is connected to CORRECT WiFi

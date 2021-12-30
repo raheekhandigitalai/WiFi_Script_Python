@@ -10,6 +10,12 @@ end_point = '/api/v1/devices'
 
 cloud_url_and_api_end_point = cloud_url + end_point
 
+
+# Re-usable method for logging purposes
+def logger(content):
+    logger(content)
+
+
 def get_device_id(serial_number):
     end_url = cloud_url_and_api_end_point + "?query=@serialnumber='" + serial_number + "'"
 
@@ -35,9 +41,11 @@ def remove_all_device_tags(device_id):
     response = requests.request('DELETE', end_url, headers=headers, verify=False)
 
     if response.status_code == 200:
-        print('Python Script - Successfully removed all device tags from device, response output: %s' % response.text)
+        logger('Python Script (function: remove_all_device_tags) - Successfully removed all device tags from device, '
+               'response output: %s' % response.text)
     else:
-        print('Python Script - Unable to remove device tags from device, response output: %s' % response.text)
+        logger('Python Script (function: remove_all_device_tags) - Unable to remove device tags from device, '
+               'response output: %s' % response.text)
 
     return response
 
@@ -53,10 +61,10 @@ def add_device_tag(device_id, tag_value):
     response = requests.request('PUT', end_url, headers=headers, verify=False)
 
     if response.status_code == 200:
-        print('Python Script - Successfully added device tag to device, response output: %s' % response.text)
-        print('Python Script - Device Tag Added: %s' % tag_value)
+        logger('Python Script (function: add_device_tag) - Successfully added device tag to device, response output: %s' % response.text)
+        logger('Python Script (function: add_device_tag) - Device Tag Added: %s' % tag_value)
     else:
-        print('Python Script - Unable to add device tag to device, response output: %s' % response.text)
+        logger('Python Script (function: add_device_tag) - Unable to add device tag to device, response output: %s' % response.text)
 
     return response
 
@@ -72,9 +80,9 @@ def finish_cleanup_state(uid, status):
     response = requests.request('POST', end_url, headers=headers, verify=False)
 
     if response.status_code == 200:
-        print('Python Script - Successfully finished Cleanup State: %s' % response.text)
+        logger('Python Script (function: finish_cleanup_state) - Successfully finished Cleanup State: %s' % response.text)
     else:
-        print('Python Script - Unable to finish Cleanup State: %s' % response.text)
+        logger('Python Script (function: finish_cleanup_state) - Unable to finish Cleanup State: %s' % response.text)
 
     return response
 
