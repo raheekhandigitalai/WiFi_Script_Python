@@ -2,6 +2,8 @@ import requests
 import json
 import configparser
 
+from Helper import logger
+
 config = configparser.ConfigParser()
 config.read('config.properties')
 
@@ -9,11 +11,6 @@ cloud_url = 'https://uscloud.experitest.com'
 end_point = '/api/v1/devices'
 
 cloud_url_and_api_end_point = cloud_url + end_point
-
-
-# Re-usable method for logging purposes
-def logger(content):
-    logger(content)
 
 
 def get_device_id(serial_number):

@@ -3,10 +3,13 @@ import unittest
 import configparser
 import sys
 
+from Helper import logger
+
 from APIs import remove_all_device_tags
 from APIs import add_device_tag
 from APIs import get_device_id
 from APIs import finish_cleanup_state
+
 from appium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver import DesiredCapabilities
@@ -24,23 +27,23 @@ config = configparser.ConfigParser()
 config.read('config.properties')
 
 
-# Re-usable method for logging purposes
-def logger(content):
-    print(content)
-
-
 class SampleTestCase(unittest.TestCase):
+
     # def test_2(self):
     # print(get_device_id('56793ec400fe2121df8a6341591cbd25b7c26c70'))
 
     # Android currently not supported. If Device is Android, exit the script before it starts
     if operating_system == 'Android':
-        logger('operating_system is android, not yet supported: %s' % operating_system)
+        logger('Python Script (logger) - operating_system is android, not yet supported: %s' % operating_system)
+        # Marking the test as passed, otherwise cloud device will remain in 'Cleanup Failed' mode
         status = 'passed'
+        # Marking the test as passed, and finishes up the cleanup session
         finish_cleanup_state(uid, status)
+        # Exiting script
         sys.exit()
     elif operating_system == 'iOS':
-        logger('operating_system is ios, continuing: %s' % operating_system)
+        # if iOS, do nothing
+        logger('Python Script (logger) - operating_system is ios, continuing: %s' % operating_system)
 
     capabilities['testName'] = 'Webhook cleanup'
     capabilities['accessKey'] = '%s' % config.get('seetest_authorization', 'access_key_cleanup')
@@ -68,13 +71,13 @@ class SampleTestCase(unittest.TestCase):
 
         # Check if the desired WiFi name is present in the connected WiFi
         if config.get('wifi', 'wifi_name') in wifi_label:
-            logger('Python Script - Connected to correct WiFi: %s' % wifi_label)
+            logger('Python Script (logger) - Connected to correct WiFi: %s' % wifi_label)
             # remove all device tags with an API call
             remove_all_device_tags(device_id)
             # add custom device tag with an API call
             add_device_tag(device_id, config.get('tags', 'good_tag_value'))
         else:
-            logger('Python Script - Not Connected to correct WiFi: %s' % wifi_label)
+            logger('Python Script (logger) - Not Connected to correct WiFi: %s' % wifi_label)
             # remove all device tags with an API call
             remove_all_device_tags(device_id)
             # add custom device tag with an API call

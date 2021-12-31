@@ -71,7 +71,7 @@ wifi_name=WiFiName - String value of the WiFi connection we are looking for on t
 
    ![img_4.png](images/img_4.png)
 
-   The URL is the full JOB URL:
+   The URL is the full JOB URL (_Further down in this README.md, we'll see how to generate a token_):
 
 ```
 https://<jenkins_url>/job/<job_name>/buildWithParameters?=Token
