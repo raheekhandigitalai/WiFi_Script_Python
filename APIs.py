@@ -13,7 +13,7 @@ end_point = '/api/v1/devices'
 cloud_url_and_api_end_point = cloud_url + end_point
 
 
-def get_device_id(serial_number):
+def get_device_property(serial_number, property_value):
     end_url = cloud_url_and_api_end_point + "?query=@serialnumber='" + serial_number + "'"
 
     headers = {
@@ -23,8 +23,8 @@ def get_device_id(serial_number):
 
     response = requests.request('GET', end_url, headers=headers, verify=False)
 
-    device_id = get_json_value_from_response_content('id', response.content)
-    return device_id
+    value = get_json_value_from_response_content(property_value, response.content)
+    return value
 
 
 def remove_all_device_tags(device_id):
