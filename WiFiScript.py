@@ -3,7 +3,13 @@ import unittest
 import configparser
 import sys
 
+import Locators
+
 from Helper import logger
+from Helper import get_text_from_element
+from Helper import find_elements
+from Helper import wait_for_element_to_be_present
+from Helper import wait_for_element_to_be_present_and_click
 
 from APIs import remove_all_device_tags
 from APIs import add_device_tag
@@ -11,10 +17,7 @@ from APIs import get_device_property
 from APIs import finish_cleanup_state
 
 from appium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.webdriver import DesiredCapabilities
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 status = 'failed'
 
@@ -42,10 +45,12 @@ class SampleTestCase(unittest.TestCase):
         finish_cleanup_state(uid, status)
         # Exiting script
         sys.exit()
+
+    # if iOS - Do nothing, continue test as usual
     elif operating_system == 'iOS':
-        # if iOS, do nothing
         logger('Python Script (logger) - operating_system is ios, continuing: %s' % operating_system)
 
+    # Capabilities for the session
     capabilities['testName'] = 'Webhook cleanup'
     # capabilities['accessKey'] = '%s' % config.get('seetest_authorization', 'access_key_cleanup')
     capabilities['accessKey'] = '%s' % config.get('seetest_authorization', 'access_key_admin')
@@ -74,61 +79,79 @@ class SampleTestCase(unittest.TestCase):
         # Getting Device Category (PHONE / TABLET) from SeeTestCloud with an API call
         device_category = get_device_property(device_udid, 'deviceCategory')
 
-        # Storing WiFi Connection in text format
-        wifi_label = self.driver.find_element(By.XPATH,
-                                              "(//*[@id='Wi-Fi']//XCUIElementTypeStaticText)[2]").text  # XPATH applicable for iOS 12 / 13 / 14 / 15 - Checked both iPhone & iPad
+        # Wait for element to be present before interacting
+        wait_for_element_to_be_present(self.driver, Locators.wifi_xpath)
 
-        # Check if the desired WiFi name is present in the connected WiFi
+        # Storing Wi-Fi Connection in text format
+        wifi_label = get_text_from_element(self.driver, Locators.wifi_xpath)
+
+        # Check if the desired Wi-Fi name is present in the connected Wi-Fi
         if config.get('wifi', 'wifi_name') in wifi_label:
-            logger('Python Script (logger) - Connected to correct WiFi: %s' % wifi_label)
+            logger('Python Script (logger) - Connected to correct Wi-Fi: %s' % wifi_label)
             # remove all device tags with an API call
             remove_all_device_tags(device_id)
             # add custom device tag with an API call
             add_device_tag(device_id, config.get('tags', 'good_tag_value'))
         else:
-            logger('Python Script (logger) - Not Connected to correct WiFi: %s' % wifi_label)
+            logger('Python Script (logger) - Not Connected to correct Wi-Fi: %s' % wifi_label)
             # remove all device tags with an API call
             remove_all_device_tags(device_id)
             # add custom device tag with an API call
             add_device_tag(device_id, config.get('tags', 'bad_tag_value'))
 
-
-        # List to be populated by the profiles found under General > Profile (15 <) / Device Management (15 >)
+        # List to be populated by the profiles found
+        # General > Profile (iOS 14 and below)
+        # General > VPN & Device Management (iOS 15 +)
         profiles = []
 
-        # Check if script is being ran against iPad. If so, then I want to avoid additional steps like scrolls. On
-        # smaller screen sizes "General" may not appear and scroll may be needed.
+        # Check if script is being triggered against iPad. If so, then I want to avoid additional steps like scrolls.
+        # On smaller screen sizes "General" may not appear and scroll may be needed.
         if device_category == 'TABLET':
-            self.driver.find_element(By.XPATH,
-                                     "//XCUIElementTypeCell[@text='General']").click()
+            # Wait for element and click
+            wait_for_element_to_be_present_and_click(self.driver, Locators.general_xpath)
+
             # iOS 15 + does not have 'profiles' under 'General'. It is instead VPN and Device Management
             if '15' in device_os_version:
-                # Click on 'VPN & Device Management'
-                self.driver.find_element(By.XPATH, "//XCUIElementTypeCell[contains(text(), 'Device Management')]").click()
+                # Wait for element and click on 'VPN & Device Management'
+                wait_for_element_to_be_present_and_click(
+                    self.driver, Locators.vpn_and_device_management_xpath)
+
                 # Store profiles in a list
-                profiles = self.driver.find_elements(By.XPATH,
-                                                     "//XCUIElementTypeOther[@text='CONFIGURATION PROFILE']/following-sibling::XCUIElementTypeCell")
+                profiles = find_elements(self.driver,
+                                         Locators.profiles_list_xpath)
+
                 # Iterate and list out each profile present
+                logger('Python Script (logger) - Printing all available Profiles ==>')
                 for profile in profiles:
-                    print('profile: %s' % profile.text)
+                    logger('Python Script (logger) - profile: %s' % profile.text)
+                    # Add logic on what to be done if profile found / not found
+                logger('Python Script (logger) - <== End of printing all available Profiles')
+
             else:
-                # Click on 'Profile'
-                self.driver.find_element(By.XPATH, "//XCUIElementTypeCell[contains(text(), 'Profile')]").click()
+                # Wait for element and click on 'Profile'
+                wait_for_element_to_be_present_and_click(
+                    self.driver, Locators.profile_xpath)
+
                 # Store profiles in a list
-                profiles = self.driver.find_elements(By.XPATH,
-                                                     "//XCUIElementTypeOther[@text='CONFIGURATION PROFILE']/following-sibling::XCUIElementTypeCell")
+                profiles = find_elements(self.driver,
+                                         Locators.profiles_list_xpath)
+
                 # Iterate and list out each profile present
+                logger('Python Script (logger) - Printing all available Profiles ==>')
                 for profile in profiles:
-                    print('profile: %s' % profile.text)
+                    logger('Python Script (logger) - profile: %s' % profile.text)
+                    # Add logic on what to be done if profile found / not found
+                logger('Python Script (logger) - <== End of printing all available Profiles')
+
         elif device_category == 'PHONE':
             # Implement swipe
             # Implement click on General
 
             # iOS 15 + does not have 'profiles' under 'General'. It is instead VPN and Device Management
             if '15' in device_os_version:
-                print('')  # Implement click on 'VPN & Device Management' and Implement storing profiles into a list
+                logger('')  # Implement click on 'VPN & Device Management' and Implement storing profiles into a list
             else:
-                print('')  # Implement click on 'Profile' and Implement storing profiles into a list
+                logger('')  # Implement click on 'Profile' and Implement storing profiles into a list
 
     def tearDown(self):
         # Marking the test as passed, otherwise cloud device will remain in 'Cleanup Failed' mode
