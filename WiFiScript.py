@@ -52,10 +52,10 @@ class SampleTestCase(unittest.TestCase):
 
     # Capabilities for the session
     capabilities['testName'] = 'Webhook cleanup'
-    # capabilities['accessKey'] = '%s' % config.get('seetest_authorization', 'access_key_cleanup')
-    capabilities['accessKey'] = '%s' % config.get('seetest_authorization', 'access_key_admin')
-    # capabilities['udid'] = '%s' % uid
-    capabilities['udid'] = '00008020-000275D43CD8003A'
+    capabilities['accessKey'] = '%s' % config.get('seetest_authorization', 'access_key_cleanup')
+    # capabilities['accessKey'] = '%s' % config.get('seetest_authorization', 'access_key_admin')
+    capabilities['udid'] = '%s' % uid
+    # capabilities['udid'] = '00008020-000275D43CD8003A'
     capabilities['platformName'] = 'iOS'
     capabilities['autoDismissAlerts'] = True
     capabilities['releaseDevice'] = False
