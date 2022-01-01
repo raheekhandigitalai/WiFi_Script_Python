@@ -13,6 +13,8 @@ from APIs import finish_cleanup_state
 from appium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver import DesiredCapabilities
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 status = 'failed'
 
@@ -45,10 +47,10 @@ class SampleTestCase(unittest.TestCase):
         logger('Python Script (logger) - operating_system is ios, continuing: %s' % operating_system)
 
     capabilities['testName'] = 'Webhook cleanup'
-    capabilities['accessKey'] = '%s' % config.get('seetest_authorization', 'access_key_cleanup')
-    # capabilities['accessKey'] = '%s' % config.get('seetest_authorization', 'access_key_admin')
-    capabilities['udid'] = '%s' % uid
-    # capabilities['udid'] = '56793ec400fe2121df8a6341591cbd25b7c26c70'
+    # capabilities['accessKey'] = '%s' % config.get('seetest_authorization', 'access_key_cleanup')
+    capabilities['accessKey'] = '%s' % config.get('seetest_authorization', 'access_key_admin')
+    # capabilities['udid'] = '%s' % uid
+    capabilities['udid'] = '00008020-000275D43CD8003A'
     capabilities['platformName'] = 'iOS'
     capabilities['autoDismissAlerts'] = True
     capabilities['releaseDevice'] = False
@@ -90,6 +92,10 @@ class SampleTestCase(unittest.TestCase):
             # add custom device tag with an API call
             add_device_tag(device_id, config.get('tags', 'bad_tag_value'))
 
+
+        # List to be populated by the profiles found under General > Profile (15 <) / Device Management (15 >)
+        profiles = []
+
         # Check if script is being ran against iPad. If so, then I want to avoid additional steps like scrolls. On
         # smaller screen sizes "General" may not appear and scroll may be needed.
         if device_category == 'TABLET':
@@ -97,24 +103,32 @@ class SampleTestCase(unittest.TestCase):
                                      "//XCUIElementTypeCell[@text='General']").click()
             # iOS 15 + does not have 'profiles' under 'General'. It is instead VPN and Device Management
             if '15' in device_os_version:
-                print('')
+                # Click on 'VPN & Device Management'
+                self.driver.find_element(By.XPATH, "//XCUIElementTypeCell[contains(text(), 'Device Management')]").click()
+                # Store profiles in a list
+                profiles = self.driver.find_elements(By.XPATH,
+                                                     "//XCUIElementTypeOther[@text='CONFIGURATION PROFILE']/following-sibling::XCUIElementTypeCell")
+                # Iterate and list out each profile present
+                for profile in profiles:
+                    print('profile: %s' % profile.text)
             else:
-                print('')
-
+                # Click on 'Profile'
+                self.driver.find_element(By.XPATH, "//XCUIElementTypeCell[contains(text(), 'Profile')]").click()
+                # Store profiles in a list
+                profiles = self.driver.find_elements(By.XPATH,
+                                                     "//XCUIElementTypeOther[@text='CONFIGURATION PROFILE']/following-sibling::XCUIElementTypeCell")
+                # Iterate and list out each profile present
+                for profile in profiles:
+                    print('profile: %s' % profile.text)
         elif device_category == 'PHONE':
-            # PERFORM SWIPE HERE
-            self.driver.find_element(By.XPATH,
-                                     "//XCUIElementTypeCell[@text='General']").click()
+            # Implement swipe
+            # Implement click on General
+
             # iOS 15 + does not have 'profiles' under 'General'. It is instead VPN and Device Management
             if '15' in device_os_version:
-                print('')
+                print('')  # Implement click on 'VPN & Device Management' and Implement storing profiles into a list
             else:
-                print('')
-
-        # self.driver.find_element(By.XPATH, "//XCUIElementTypeCell[contains(text(), 'Device Management')]") - iOS 15 +
-        # self.driver.find_element(By.XPATH, "//XCUIElementTypeCell[contains(text(), 'Profile')]") - iOS 12 / 13 / 14
-
-        # profiles = self.driver.find_elements(By.XPATH, "//XCUIElementTypeOther[@text='CONFIGURATION PROFILE']/following-sibling::XCUIElementTypeCell") # Check which profiles are available are on the device - Checked on following iOS 13 / 14 / 15 - Checked both iPhone & iPad
+                print('')  # Implement click on 'Profile' and Implement storing profiles into a list
 
     def tearDown(self):
         # Marking the test as passed, otherwise cloud device will remain in 'Cleanup Failed' mode
@@ -123,11 +137,6 @@ class SampleTestCase(unittest.TestCase):
         self.driver.quit()
         # Marking the test as passed, and finishes up the cleanup session
         finish_cleanup_state(uid, status)
-
-
-# def scroll_to_element_and_click(xpath, driver):
-#     driver.execute(
-#        "seetest:client.swipeWhileNotFound(\"UP\", 500, 1000, \"NATIVE\", \"%s\", 0, 2000, 2, true)") % xpath
 
 
 # Helps run the test using unittest framework
