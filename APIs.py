@@ -7,10 +7,7 @@ from Helper import logger
 config = configparser.ConfigParser()
 config.read('config.properties')
 
-cloud_url = 'https://uscloud.experitest.com'
-end_point = '/api/v1/devices'
-
-cloud_url_and_api_end_point = cloud_url + end_point
+cloud_url_and_api_end_point = config.get('seetest_urls', 'cloud_url') + config.get('seetest_urls', 'end_point')
 
 
 def get_device_property(serial_number, property_value):
