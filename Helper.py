@@ -28,3 +28,13 @@ def find_elements(driver, xpath):
 def get_text_from_element(driver, xpath):
     value = driver.find_element(By.XPATH, xpath).text
     return value
+
+
+def click_element_else_swipe_and_click(driver, xpath):
+    try:
+        if driver.find_element(By.XPATH, xpath).is_displayed():
+            driver.find_element(By.XPATH, xpath).click()
+    except:
+        driver.execute_script(
+            "seetest:client.swipeWhileNotFound(\"DOWN\", 1400, 1000, \"NATIVE\", \"xpath=" + xpath + "\", 0, 1500, 2, true)")
+

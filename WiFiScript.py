@@ -10,6 +10,7 @@ from Helper import get_text_from_element
 from Helper import find_elements
 from Helper import wait_for_element_to_be_present
 from Helper import wait_for_element_to_be_present_and_click
+from Helper import click_element_else_swipe_and_click
 
 from APIs import remove_all_device_tags
 from APIs import add_device_tag
@@ -144,14 +145,47 @@ class SampleTestCase(unittest.TestCase):
                 logger('Python Script (logger) - <== End of printing all available Profiles')
 
         elif device_category == 'PHONE':
-            # Implement swipe
-            # Implement click on General
+            # Wait for Settings page to load properly before proceeding
+            wait_for_element_to_be_present(self.driver, Locators.settings_navigation_bar_xpath)
+
+            # If 'General' is visually present, click on it. Otherwise, scroll and then click
+            # In case of smaller screen sizes where 'General' is not visible until scroll
+            click_element_else_swipe_and_click(self.driver, Locators.general_with_onscreen_xpath, 1000)
+
+            # Wait for next page to load before proceeding
+            wait_for_element_to_be_present(self.driver, Locators.about_xpath)
 
             # iOS 15 + does not have 'profiles' under 'General'. It is instead VPN and Device Management
             if '15' in device_os_version:
-                logger('')  # Implement click on 'VPN & Device Management' and Implement storing profiles into a list
+                # Click on 'VPN & Device Management' if present, otherwise scroll and then click
+                click_element_else_swipe_and_click(self.driver, Locators.vpn_and_device_management_with_onscreen_property_xpath, 400)
+
+                # Store profiles in a list
+                profiles = find_elements(self.driver,
+                                         Locators.profiles_list_xpath)
+
+                # Iterate and list out each profile present
+                logger('Python Script (logger) - Printing all available Profiles ==>')
+                for profile in profiles:
+                    logger('Python Script (logger) - profile: %s' % profile.text)
+                    # Add logic on what to be done if profile found / not found
+                logger('Python Script (logger) - <== End of printing all available Profiles')
             else:
-                logger('')  # Implement click on 'Profile' and Implement storing profiles into a list
+                # Click on 'Profile' if present, otherwise scroll and then click
+                click_element_else_swipe_and_click(self.driver,
+                                                   Locators.profile_with_onscreen_property_xpath,
+                                                   400)
+
+                # Store profiles in a list
+                profiles = find_elements(self.driver,
+                                         Locators.profiles_list_xpath)
+
+                # Iterate and list out each profile present
+                logger('Python Script (logger) - Printing all available Profiles ==>')
+                for profile in profiles:
+                    logger('Python Script (logger) - profile: %s' % profile.text)
+                    # Add logic on what to be done if profile found / not found
+                logger('Python Script (logger) - <== End of printing all available Profiles')
 
     def tearDown(self):
         # Marking the test as passed, otherwise cloud device will remain in 'Cleanup Failed' mode
