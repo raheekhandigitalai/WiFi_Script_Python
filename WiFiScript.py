@@ -54,7 +54,7 @@ class SampleTestCase(unittest.TestCase):
     capabilities['accessKey'] = '%s' % config.get('seetest_authorization', 'access_key_cleanup')
     capabilities['udid'] = '%s' % uid
     capabilities['platformName'] = 'iOS'
-    capabilities['autoDismissAlerts'] = True
+    capabilities['autoDismissAlerts'] = True # This helps to handle unexpected native pop-ups
     capabilities['releaseDevice'] = False
     capabilities['bundleId'] = 'com.apple.Preferences'
 
@@ -75,6 +75,9 @@ class SampleTestCase(unittest.TestCase):
 
         # Getting Device Category (PHONE / TABLET) from SeeTestCloud with an API call
         device_category = get_device_property(device_udid, 'deviceCategory')
+
+        # Getting Device Category (PHONE / TABLET) from SeeTestCloud with an API call
+        device_model = get_device_property(device_udid, 'model')
 
         # Wait for element to be present before interacting
         wait_for_element_to_be_present(self.driver, Locators.wifi_xpath)
@@ -153,9 +156,15 @@ class SampleTestCase(unittest.TestCase):
             # Wait for Settings page to load properly before proceeding
             wait_for_element_to_be_present(self.driver, Locators.settings_navigation_bar_xpath)
 
-            # If 'General' is visually present, click on it. Otherwise, scroll and then click
-            # In case of smaller screen sizes where 'General' is not visible until scroll
-            click_element_else_swipe_and_click(self.driver, Locators.general_with_onscreen_xpath, 1000)
+            # If Devices is iPhone SE, screen size is smaller, I want to start the scroll from a different offset
+            if 'SE' in device_model:
+                # If 'General' is visually present, click on it. Otherwise, scroll and then click
+                # In case of smaller screen sizes where 'General' is not visible until scroll
+                click_element_else_swipe_and_click(self.driver, Locators.general_with_onscreen_xpath, 700)
+            else:
+                # If 'General' is visually present, click on it. Otherwise, scroll and then click
+                # In case of smaller screen sizes where 'General' is not visible until scroll
+                click_element_else_swipe_and_click(self.driver, Locators.general_with_onscreen_xpath, 1000)
 
             # Wait for next page to load before proceeding
             wait_for_element_to_be_present(self.driver, Locators.about_xpath)
