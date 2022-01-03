@@ -34,8 +34,6 @@ config.read('config.properties')
 
 
 class SampleTestCase(unittest.TestCase):
-    # def test_2(self):
-    #     print(get_device_os_version('56793ec400fe2121df8a6341591cbd25b7c26c70'))
 
     # Android currently not supported. If Device is Android, exit the script before it starts
     if operating_system == 'Android':
@@ -54,9 +52,7 @@ class SampleTestCase(unittest.TestCase):
     # Capabilities for the session
     capabilities['testName'] = 'Webhook cleanup'
     capabilities['accessKey'] = '%s' % config.get('seetest_authorization', 'access_key_cleanup')
-    # capabilities['accessKey'] = '%s' % config.get('seetest_authorization', 'access_key_admin')
     capabilities['udid'] = '%s' % uid
-    # capabilities['udid'] = '2b5140fb4d4e7a7373bcac63aef13094148cccf0'
     capabilities['platformName'] = 'iOS'
     capabilities['autoDismissAlerts'] = True
     capabilities['releaseDevice'] = False
@@ -108,11 +104,15 @@ class SampleTestCase(unittest.TestCase):
         # Check if script is being triggered against iPad. If so, then I want to avoid additional steps like scrolls.
         # On smaller screen sizes 'General' may not appear and scroll may be needed.
         if device_category == 'TABLET':
+            logger('Python Script (logger) - Running on Device Category: %s' % device_category)
+
             # Wait for element and click
             wait_for_element_to_be_present_and_click(self.driver, Locators.general_xpath)
 
             # iOS 15 + does not have 'profiles' under 'General'. It is instead VPN and Device Management
             if '15' in device_os_version:
+                logger('Python Script (logger) - Running on Device OS Version: %s' % device_os_version)
+
                 # Wait for element and click on 'VPN & Device Management'
                 wait_for_element_to_be_present_and_click(
                     self.driver, Locators.vpn_and_device_management_xpath)
@@ -129,6 +129,8 @@ class SampleTestCase(unittest.TestCase):
                 logger('Python Script (logger) - <== End of printing all available Profiles')
 
             else:
+                logger('Python Script (logger) - Running on Device OS Version: %s' % device_os_version)
+
                 # Wait for element and click on 'Profile'
                 wait_for_element_to_be_present_and_click(
                     self.driver, Locators.profile_xpath)
@@ -146,6 +148,8 @@ class SampleTestCase(unittest.TestCase):
 
         # This will be invoked if cleanup script picked up an iPhone
         elif device_category == 'PHONE':
+            logger('Python Script (logger) - Running on Device Category: %s' % device_category)
+
             # Wait for Settings page to load properly before proceeding
             wait_for_element_to_be_present(self.driver, Locators.settings_navigation_bar_xpath)
 
@@ -158,6 +162,8 @@ class SampleTestCase(unittest.TestCase):
 
             # iOS 15 + does not have 'profiles' under 'General'. It is instead VPN and Device Management
             if '15' in device_os_version:
+                logger('Python Script (logger) - Running on Device OS Version: %s' % device_os_version)
+
                 # Click on 'VPN & Device Management' if present, otherwise scroll and then click
                 click_element_else_swipe_and_click(self.driver, Locators.vpn_and_device_management_with_onscreen_property_xpath, 400)
 
@@ -172,6 +178,8 @@ class SampleTestCase(unittest.TestCase):
                     # Add logic on what to be done if profile found / not found
                 logger('Python Script (logger) - <== End of printing all available Profiles')
             else:
+                logger('Python Script (logger) - Running on Device OS Version: %s' % device_os_version)
+
                 # Click on 'Profile' if present, otherwise scroll and then click
                 click_element_else_swipe_and_click(self.driver,
                                                    Locators.profile_with_onscreen_property_xpath,
