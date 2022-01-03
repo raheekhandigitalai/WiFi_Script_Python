@@ -106,7 +106,7 @@ class SampleTestCase(unittest.TestCase):
         profiles = []
 
         # Check if script is being triggered against iPad. If so, then I want to avoid additional steps like scrolls.
-        # On smaller screen sizes "General" may not appear and scroll may be needed.
+        # On smaller screen sizes 'General' may not appear and scroll may be needed.
         if device_category == 'TABLET':
             # Wait for element and click
             wait_for_element_to_be_present_and_click(self.driver, Locators.general_xpath)
@@ -144,6 +144,7 @@ class SampleTestCase(unittest.TestCase):
                     # Add logic on what to be done if profile found / not found
                 logger('Python Script (logger) - <== End of printing all available Profiles')
 
+        # This will be invoked if cleanup script picked up an iPhone
         elif device_category == 'PHONE':
             # Wait for Settings page to load properly before proceeding
             wait_for_element_to_be_present(self.driver, Locators.settings_navigation_bar_xpath)
