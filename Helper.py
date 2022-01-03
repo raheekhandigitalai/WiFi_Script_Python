@@ -34,11 +34,11 @@ def get_text_from_element(driver, xpath):
 
 
 # Re-usable method to click on element if found, else swipe and click
-def click_element_else_swipe_and_click(driver, xpath):
+def click_element_else_swipe_and_click(driver, xpath, start_offset):
     try:
         if driver.find_element(By.XPATH, xpath).is_displayed():
             driver.find_element(By.XPATH, xpath).click()
     except:
-        driver.execute_script(
-            "seetest:client.swipeWhileNotFound(\"DOWN\", 1400, 1000, \"NATIVE\", \"xpath=" + xpath + "\", 0, 1500, 2, true)")
+        driver.execute_script("seetest:client.swipeWhileNotFound(\"DOWN\"," + str(start_offset) +
+                              ", 1000, \"NATIVE\", \"xpath=" + xpath + "\", 0, 1500, 2, true)")
 

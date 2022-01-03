@@ -56,7 +56,7 @@ class SampleTestCase(unittest.TestCase):
     capabilities['accessKey'] = '%s' % config.get('seetest_authorization', 'access_key_cleanup')
     # capabilities['accessKey'] = '%s' % config.get('seetest_authorization', 'access_key_admin')
     capabilities['udid'] = '%s' % uid
-    # capabilities['udid'] = '00008020-000275D43CD8003A'
+    # capabilities['udid'] = '2b5140fb4d4e7a7373bcac63aef13094148cccf0'
     capabilities['platformName'] = 'iOS'
     capabilities['autoDismissAlerts'] = True
     capabilities['releaseDevice'] = False
