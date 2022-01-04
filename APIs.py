@@ -35,11 +35,13 @@ def remove_all_device_tags(device_id):
     response = requests.request('DELETE', end_url, headers=headers, verify=False)
 
     if response.status_code == 200:
-        logger('Python Script (function: remove_all_device_tags) - Successfully removed all device tags from device, '
-               'response output: %s' % response.text)
+        logger(
+            'Python Script (function: remove_all_device_tags) - Successfully removed all device tags from device, '
+            'response output: %s' % response.text)
     else:
-        logger('Python Script (function: remove_all_device_tags) - Unable to remove device tags from device, '
-               'response output: %s' % response.text)
+        logger(
+            'Python Script (function: remove_all_device_tags) - Unable to remove device tags from device, '
+            'response output: %s' % response.text)
 
     return response
 
@@ -55,10 +57,12 @@ def add_device_tag(device_id, tag_value):
     response = requests.request('PUT', end_url, headers=headers, verify=False)
 
     if response.status_code == 200:
-        logger('Python Script (function: add_device_tag) - Successfully added device tag to device, response output: %s' % response.text)
+        logger(
+            'Python Script (function: add_device_tag) - Successfully added device tag to device, response output: %s' % response.text)
         logger('Python Script (function: add_device_tag) - Device Tag Added: %s' % tag_value)
     else:
-        logger('Python Script (function: add_device_tag) - Unable to add device tag to device, response output: %s' % response.text)
+        logger(
+            'Python Script (function: add_device_tag) - Unable to add device tag to device, response output: %s' % response.text)
 
     return response
 
@@ -74,9 +78,11 @@ def finish_cleanup_state(uid, status):
     response = requests.request('POST', end_url, headers=headers, verify=False)
 
     if response.status_code == 200:
-        logger('Python Script (function: finish_cleanup_state) - Successfully finished Cleanup State: %s' % response.text)
+        logger(
+            'Python Script (function: finish_cleanup_state) - Successfully finished Cleanup State: %s' % response.text)
     else:
-        logger('Python Script (function: finish_cleanup_state) - Unable to finish Cleanup State: %s' % response.text)
+        logger(
+            'Python Script (function: finish_cleanup_state) - Unable to finish Cleanup State: %s' % response.text)
 
     return response
 
@@ -85,4 +91,3 @@ def get_json_value_from_response_content(value, response_content):
     data = json.loads(response_content)
     return_value = data['data'][0]['%s' % value]
     return return_value
-

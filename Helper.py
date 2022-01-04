@@ -17,20 +17,20 @@ def wait_for_element_to_be_present(driver, xpath):
 
 # Re-usable method for waiting on element to be present and then click
 def wait_for_element_to_be_present_and_click(driver, xpath):
-    wait_for_element_to_be_present(driver, xpath)
+    driver.wait_for_element_to_be_present(driver, xpath)
     driver.find_element(By.XPATH, xpath).click()
-
-
-# Re-usable method for getting elements in a list format
-def find_elements(driver, xpath):
-    items = driver.find_elements(By.XPATH, xpath)
-    return items
 
 
 # Re-usable method to get text from element
 def get_text_from_element(driver, xpath):
     value = driver.find_element(By.XPATH, xpath).text
     return value
+
+
+# Re-usable method for getting elements in a list format
+def find_elements(driver, xpath):
+    items = driver.find_elements(By.XPATH, xpath)
+    return items
 
 
 # Re-usable method to click on element if found, else swipe and click
