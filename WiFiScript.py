@@ -49,6 +49,7 @@ class SampleTestCase(unittest.TestCase):
     capabilities['platformName'] = 'iOS'
     capabilities['autoDismissAlerts'] = True # This helps to handle unexpected native pop-ups
     capabilities['releaseDevice'] = False
+    capabilities['generateReport'] = False
     capabilities['bundleId'] = 'com.apple.Preferences'
 
     def setUp(self):
