@@ -22,6 +22,7 @@ from selenium.webdriver import DesiredCapabilities
 
 status = 'failed'
 
+# Properties sent from SeeTest Cloud that we can use in Script
 uid = os.getenv("deviceID")
 operating_system = os.getenv("deviceOS")
 
@@ -31,9 +32,6 @@ capabilities = DesiredCapabilities.IPHONE
 # config.properties reader
 config = configparser.ConfigParser()
 config.read('config.properties')
-
-# helper = Helper()
-# api = APIs.APIs()
 
 
 class SampleTestCase(unittest.TestCase):
